@@ -1,0 +1,27 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: prod
+  namespace: flux-system
+spec:
+  interval: 30s
+  ref:
+    branch: master
+  url: https://github.com/vfiftyfive/CFD12-Demo-Manifests.git
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: prod
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./overlay/prod
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: prod
+  targetNamespace: default
+
